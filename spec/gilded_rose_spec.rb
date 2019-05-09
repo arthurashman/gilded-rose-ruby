@@ -56,15 +56,51 @@ describe GildedRose do
         GildedRose.new(items).update_quality
         expect(items[0].quality).to eq 12
       end
-      it 'doesnt update the quality value not past 50 when in date' do
+      it 'does not update the quality value not past 50 when in date' do
         items = [Item.new('Aged Brie', 2, 50)]
         GildedRose.new(items).update_quality
         expect(items[0].quality).to eq 50
       end
-      it 'doesnt update the quality value not past 50 when out of date' do
+      it 'does not update the quality value not past 50 when out of date' do
         items = [Item.new('Aged Brie', 0, 50)]
         GildedRose.new(items).update_quality
         expect(items[0].quality).to eq 50
+      end
+    end
+    context 'Updating Sulfuras' do
+      it 'does not update the quality value while in date' do
+        items = [Item.new('Sulfuras, Hand of Ragnaros', 2, 80)]
+        GildedRose.new(items).update_quality
+        expect(items[0].quality).to eq 80
+      end
+      it 'does not update the quality value while out of date' do
+        items = [Item.new('Sulfuras, Hand of Ragnaros', 0, 80)]
+        GildedRose.new(items).update_quality
+        expect(items[0].quality).to eq 80
+      end
+
+      #Does Salfuras need a test for date changing?
+    end
+    context 'Updating Backstage passes' do
+      it 'updates the quality value by 1 while over 10 days out' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 12, 20)]
+        GildedRose.new(items).update_quality
+        expect(items[0].quality).to eq 21
+      end
+      it 'updates the quality value by 2 while between 5 and 10 days out' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 6, 20)]
+        GildedRose.new(items).update_quality
+        expect(items[0].quality).to eq 22
+      end
+      it 'updates the quality value by 3 while between 1 and 5 days out' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 3, 20)]
+        GildedRose.new(items).update_quality
+        expect(items[0].quality).to eq 23
+      end
+      it 'updates the quality value to 0 after the concert' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', -1, 20)]
+        GildedRose.new(items).update_quality
+        expect(items[0].quality).to eq 0
       end
     end
   end
