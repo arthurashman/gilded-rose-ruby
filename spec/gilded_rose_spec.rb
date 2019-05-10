@@ -2,7 +2,6 @@ require 'gilded_rose'
 require 'item'
 
 describe GildedRose do
-
   describe '#update_quality' do
     context 'Updating a standard item while still in date' do
       it 'does not change the name' do
@@ -67,6 +66,7 @@ describe GildedRose do
         expect(items[0].quality).to eq 50
       end
     end
+
     context 'Updating Sulfuras' do
       it 'does not update the quality value while in date' do
         items = [Item.new('Sulfuras, Hand of Ragnaros', 2, 80)]
@@ -78,9 +78,13 @@ describe GildedRose do
         GildedRose.new(items).update_quality
         expect(items[0].quality).to eq 80
       end
-
-      #Does Salfuras need a test for date changing?
+      it 'does not update the sell in value' do
+        items = [Item.new('Sulfuras, Hand of Ragnaros', 0, 80)]
+        GildedRose.new(items).update_quality
+        expect(items[0].sell_in).to eq 0
+      end
     end
+
     context 'Updating Backstage passes' do
       it 'updates the quality value by 1 while over 10 days out' do
         items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 12, 20)]
